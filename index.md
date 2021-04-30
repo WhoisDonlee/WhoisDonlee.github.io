@@ -1,123 +1,50 @@
 ---
 layout: default
 ---
+# NextFlow-VC-pipeline
 
-Text can be **bold**, _italic_, or ~~strikethrough~~.
+NextFlow-VC-pipeline is a pipeline to detect structural variants. The pipeline is based on the [hartwig medical foundation pipeline](https://github.com/hartwigmedical/pipeline5).
+It's built in NextFlow in combination with Singularity. 
 
-[Link to another page](./another-page.html).
+## Installation
 
-There should be whitespace between paragraphs.
+The installation requires Singularity (3.7.1 tested) and NextFlow (20.10 tested).
 
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
+Singularity can be installed using the [Singularity documentation](https://sylabs.io/guides/3.7/user-guide/quick_start.html#quick-installation-steps).
 
-# Header 1
+NextFlow can be installed using conda or using the [NextFlow documentation](https://www.nextflow.io/docs/latest/getstarted.html#installation).
 
-This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
+```bash
+conda install -c bioconda nextflow
+```
 
-## Header 2
+Building the Singularity container. Documentation recommends using sudo, however it's not required.
+```bash
+sudo singularity build NextFlow-VC.sif NextFlow-VC.def
+```
 
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
+## Usage
 
-### Header 3
+First change the nextflow.config file to match the input file paths.
+Following example is for Paired-End samples named WGS_Norm_Lane#_R#.fastq.gz
+```NextFlow
+params {
+    // Input parameters
+    sampleBaseName = "WGS_Norm"
 
-```js
-// Javascript code with syntax highlighting.
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
+    refgen = "$HOME/data/refgen/rg6-17.fa.gz"
+    reads = "$HOME/data/sample/WGS_Norm/${params.sampleBaseName}*{1,2}.fastq.gz"
+    outdir = "$HOME/data/output/"
+    
+    threads = 8 // max cpus available
 }
 ```
 
-```ruby
-# Ruby code with syntax highlighting
-GitHubPages::Dependencies.gems.each do |gem, version|
-  s.add_dependency(gem, "= #{version}")
-end
+To run the pipeline:
+```bash
+nextflow -log logs/nf.log run pipeline.nf
 ```
 
-#### Header 4
 
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-
-##### Header 5
-
-1.  This is an ordered list following a header.
-2.  This is an ordered list following a header.
-3.  This is an ordered list following a header.
-
-###### Header 6
-
-| head1        | head two          | three |
-|:-------------|:------------------|:------|
-| ok           | good swedish fish | nice  |
-| out of stock | good and plenty   | nice  |
-| ok           | good `oreos`      | hmm   |
-| ok           | good `zoute` drop | yumm  |
-
-### There's a horizontal rule below this.
-
-* * *
-
-### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-
-### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-
-### And a nested list:
-
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-
-### Small image
-
-![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
-
-### Large image
-
-![Branching](https://guides.github.com/activities/hello-world/branching.png)
-
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
-```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
-
-```
-The final element.
-```
+[Link to default template info](./info.html).
+[Link to another page](./another-page.html).
